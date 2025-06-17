@@ -93,3 +93,57 @@ SELECT MAX(Salary) AS SecondHighest FROM Employees WHERE Salary < (SELECT MAX(Sa
 Normalization is the process of organizing data to reduce redundancy and improve data integrity.
 
 ---
+
+QUOTED_IDENTIFIER is a setting in SQL Server that controls how SQL Server interprets the use of double quotation marks (") in SQL statements.
+---
+What does QUOTED_IDENTIFIER do?
+•	ON (default):
+•	Double quotes (" ") can be used to delimit identifiers (such as table or column names), allowing you to use reserved keywords or special characters in those names.
+•	Single quotes (' ') are still used for string literals.
+•	OFF:
+•	Double quotes are treated as string delimiters (like single quotes).
+•	Identifiers must be delimited by square brackets ([ ]) if they contain special characters or reserved words.
+---
+Examples
+```
+SET QUOTED_IDENTIFIER ON;
+
+CREATE TABLE "Order" (
+    "Id" INT,
+    "Select" NVARCHAR(50)
+);
+
+SELECT "Id", "Select" FROM "Order";
+SET QUOTED_IDENTIFIER OFF;
+
+-- This will fail:
+-- CREATE TABLE "Order" ( ... )
+
+-- Use square brackets instead:
+CREATE TABLE [Order] (
+    [Id] INT,
+    [Select] NVARCHAR(50)
+);
+```
+
+SET ANSI_NULLS is a setting in SQL Server that controls how SQL Server handles comparisons to NULL values in queries.
+---
+What does SET ANSI_NULLS do?
+•	ON (default and recommended):
+•	Any comparison to NULL using = or != returns UNKNOWN (not TRUE or FALSE).
+•	You must use IS NULL or IS NOT NULL to check for NULL values.
+•	OFF:
+•	Comparisons to NULL using = or != behave as if NULL is a value, so column = NULL can return TRUE if the column is NULL.
+---
+Examples
+```
+SET ANSI_NULLS ON;
+
+SELECT * FROM Users WHERE Name = NULL;      -- Returns no rows
+SELECT * FROM Users WHERE Name IS NULL;     -- Returns rows where Name is NULL
+
+SET ANSI_NULLS OFF;
+
+SELECT * FROM Users WHERE Name = NULL;      -- Returns rows where Name is NULL (not standard SQL behavior)
+```
+
